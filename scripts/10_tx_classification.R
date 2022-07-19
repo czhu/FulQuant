@@ -1,6 +1,8 @@
 ### given a anntotation annotate exon
 library(tidyverse)
 library(rtracklayer)
+library(parallel)
+
 projectFolder = "."
 SCRIPTDIR = file.path(projectFolder, "sw")
 GENOMEDIR = file.path(projectFolder, "genome")
