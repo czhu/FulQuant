@@ -210,18 +210,18 @@ findIncludingRanges = function(query, subject, ignore.strand = FALSE){
 ### exon skipping events
 
 intronsWithExonSkippingTab  = findIncludingRanges(dataIntronRanges, knownExonsRanges)
-intronAnnot$skippedExon = tapply(
+intronAnnot$skippedExon = c(tapply(
     knownExonsRanges$name[intronsWithExonSkippingTab$subject_i],
     factor(intronsWithExonSkippingTab$query_i,intronAnnot$index),
-    paste,collapse=";")
+    paste,collapse=";"))
 intronAnnot = intronAnnot %>% mutate(exon_skipped = !is.na(skippedExon), novel_exon_skipped = exon_skipped & type =="recomb")
 
 ############## intron retention
 exonsWithIntronRetentionTab  = findIncludingRanges(dataExonRanges, knownIntronsRanges)
-exonAnnot$retainedIntron = tapply(
+exonAnnot$retainedIntron = c(tapply(
     knownIntronsRanges$name[exonsWithIntronRetentionTab$subject_i],
     factor(exonsWithIntronRetentionTab$query_i,exonAnnot$index),
-    paste,collapse=";")
+    paste,collapse=";"))
 exonAnnot = exonAnnot %>% mutate(intron_retained = !is.na(retainedIntron), novel_intron_retained = intron_retained & type == "recomb")
 
 ## for debug only
