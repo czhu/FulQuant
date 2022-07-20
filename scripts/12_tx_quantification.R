@@ -1,6 +1,8 @@
 ## from reads after filtering and cluster info we get the count matrix for each cluster
 ## we get for each tx cluster couts for all run/sample per row
 library(rtracklayer)
+library(parallel)
+
 projectFolder = "."
 SCRIPTDIR = file.path(projectFolder, "sw")
 GENOMEDIR = file.path(projectFolder, "genome")
@@ -29,7 +31,7 @@ runCountMat = do.call(rbind,mclapply(runNamesList, function(x) table(factor(x, l
 
 sampleNameFactor = sapply( strsplit(colnames(runCountMat),"_"), "[",1 )
 
-sampleCountMat = do.call(cbind, lapply(unique(sampleNameFactor), function(thisSample) rowSums(runCountMat[, sampleNameFactor == thisSample]) ) )
+sampleCountMat = do.call(cbind, lapply(unique(sampleNameFactor), function(thisSample) rowSums(runCountMat[, sampleNameFactor == thisSample, drop=FALSE]) ) )
 colnames(sampleCountMat) = unique(sampleNameFactor)
 
 stopifnot( all(tx$clname %in% rownames(runCountMat)) )
